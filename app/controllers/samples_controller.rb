@@ -16,15 +16,13 @@ class SamplesController < ApplicationController
   end
 
   def create
-    @sample = current_user.samples.new(sample_params)
-    authorize @sample
+    authorize Sample
+    @sample = SampleForm.new(sample_params)
+    @sample.user = current_user
+    return render(:new, status: :unprocessable_entity) unless @sample.valid?
 
-    if @sample.save
-      ProcessSampleJob.perform_async(@sample.id)
-      redirect_to @sample
-    else
-      render :new, status: :unprocessable_entity
-    end
+    @sample = SampleService.create_post(@sample)
+    redirect_to sample_path(@sample.id)
   end
 
   def edit

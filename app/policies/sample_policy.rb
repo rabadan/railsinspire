@@ -7,7 +7,7 @@ class SamplePolicy < ApplicationPolicy
   end
 
   def show?
-    public? || owner?
+    (public? && published?) || owner? || moderator?
   end
 
   def create?
@@ -16,6 +16,10 @@ class SamplePolicy < ApplicationPolicy
 
   def update?
     owner?
+  end
+
+  def moderate?
+    moderator?
   end
 
   def destroy?
@@ -28,7 +32,15 @@ class SamplePolicy < ApplicationPolicy
     @sample.status_public?
   end
 
+  def published?
+    @sample.published?
+  end
+
   def owner?
     sample.user == user
+  end
+
+  def moderator?
+    user.moderator?
   end
 end

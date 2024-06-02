@@ -1,4 +1,4 @@
-<%= form_with(model: sample, builder: TailwindBuilder, data: { controller: "nested-form", nested_form_wrapper_selector_value: ".nested-form-wrapper" }) do |form| %>
+<%= form_with(model: sample, url: url, builder: TailwindBuilder, data: { controller: "nested-form", nested_form_wrapper_selector_value: ".nested-form-wrapper" }) do |form| %>
   <% if sample.errors.any? %>
     <p>Please review the problems below:</p>
 
@@ -15,10 +15,12 @@
   </div>
 
   <div class="flex space-x-4">
-    <div class="mb-4">
-      <%= form.label :category_id %>
-      <%= form.select :category_id, Category.all.map { |c| [c.name, c.id] } %>
-    </div>
+    <% if current_user.moderator? %>
+      <div class="mb-4">
+        <%= form.label :category_id %>
+        <%= form.select :category_id, Category.all.map { |c| [c.name, c.id] }, { include_blank: true } %>
+      </div>
+    <% end %>
 
     <div class="mb-4">
       <%= form.label :status %>
@@ -35,12 +37,12 @@
 
   <template data-nested-form-target="template">
     <%= form.fields_for :sample_files, SampleFile.new, child_index: "NEW_RECORD" do |sample_files| %>
-      <%= render "sample_file_fields", form: sample_files %>
+      <%= render "samples/sample_file_fields", form: sample_files %>
     <% end %>
   </template>
 
   <%= form.fields_for :sample_files do |sample_file| %>
-    <%= render "sample_file_fields", form: sample_file %>
+    <%= render "samples/sample_file_fields", form: sample_file %>
   <% end %>
 
   <div data-nested-form-target="target"></div>
@@ -48,6 +50,13 @@
   <button type="button" data-action="nested-form#add" class="bg-[#cecece] px-3 py-2 rounded">Add File</button>
 
   <hr class="mt-12 mb-6 border-t-[#cecece]">
+
+  <% if current_user.moderator? %>
+    <div class="mb-4">
+      <%= form.label :in_twitter %>
+      <%= form.check_box :in_twitter %>
+    </div>
+  <% end %>
 
   <div class="flex justify-between">
     <%= form.submit "Save", class: "px-3 py-2 text-white rounded bg-neutral-800 hover:bg-neutral-900 cursor-pointer" %>

@@ -62,8 +62,9 @@ Rails.application.configure do
   config.action_mailer.perform_deliveries = true
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.default_options = { from: 'no-reply@railsinspire.com' }
-  config.action_mailer.default_url_options = { host: 'railsinspire.com' }
+  config.action_mailer.default_url_options = { host: ENV.fetch('HOST', 'railsinspire.com') }
   config.action_mailer.perform_caching = false
+  routes.default_url_options = { host: ENV.fetch('HOST', 'railsinspire.com'), protocol: :https }
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.

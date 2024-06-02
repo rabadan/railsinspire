@@ -5,11 +5,18 @@
         <%= sample.title %>
       </div>
 
-      <% if sample.status_private? %>
-        <div class="text-neutral-400">
-          <%= render "icons/heroicons/solid/lock-closed" %>
-        </div>
-      <% end %>
+      <div class="flex">
+        <% if sample.status_private? %>
+          <div class="text-neutral-400">
+            <%= render "icons/heroicons/solid/lock-closed" %>
+          </div>
+        <% end %>
+        <% unless sample.published? %>
+          <div class="text-neutral-400" title="In moderation">
+            <%= render "icons/heroicons/solid/in_moderated" %>
+          </div>
+        <% end %>
+      </div>
     </div>
 
     <div class="mb-4 text-sm text-neutral-700 h-10 line-clamp-2">
