@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   resources :categories
   resources :samples do
     resources :sample_files, path: :files, only: [:show]
+    resource :moderate, only: %i[edit update], controller: 'samples/moderate'
   end
   resource :resize, only: [:update]
 

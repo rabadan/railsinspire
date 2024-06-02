@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_09_07_213615) do
+ActiveRecord::Schema[7.0].define(version: 2024_06_02_111431) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -65,14 +65,16 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_07_213615) do
   end
 
   create_table "samples", force: :cascade do |t|
-    t.bigint "category_id", null: false
+    t.bigint "category_id"
     t.bigint "user_id", null: false
     t.string "title"
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.enum "status", default: "private", null: false, enum_type: "sample_status"
+    t.string "state", default: "created", null: false
     t.index ["category_id"], name: "index_samples_on_category_id"
+    t.index ["state"], name: "index_samples_on_state"
     t.index ["user_id"], name: "index_samples_on_user_id"
   end
 
@@ -91,8 +93,10 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_07_213615) do
     t.string "username", default: "", null: false
     t.string "unconfirmed_email"
     t.datetime "deactivated_at"
+    t.boolean "moderator", default: false, null: false
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["moderator"], name: "index_users_on_moderator"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["username"], name: "index_users_on_username", unique: true
   end

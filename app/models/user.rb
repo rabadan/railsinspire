@@ -9,6 +9,8 @@ class User < ApplicationRecord
 
   validates :username, presence: true, username: true, uniqueness: true
 
+  scope :moderators, -> { where(moderator: true) }
+
   def active_for_authentication?
     super && active?
   end

@@ -1,0 +1,11 @@
+<% set_meta_tags title: "Moderate Sample" %>
+
+<% content_for(:header) do %>
+  <%= render HeaderComponent.new do |c| %>
+    <% c.with_title.with_content("Moderate Sample") %>
+  <% end %>
+<% end %>
+
+<div class="max-w-5xl">
+  <%= render "samples/form", sample: @sample, url: sample_moderate_path(sample_id: @sample) %>
+</div>
